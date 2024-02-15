@@ -29,8 +29,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 import karaoke
 from constants import LANGUAGES, VERSION
 from lib.get_platform import get_platform
-# Add Karacool library
-import karacooladdon as KCaddon
 
 try:
     from urllib.parse import quote, unquote

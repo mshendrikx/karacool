@@ -6,7 +6,7 @@ Karacool is a "KTV"-style karaoke song search and queueing system. It connects t
 
 The player and splash screen is now HTML-based
 
-Why? Less pesky dependencies for one. Pygame was previously used to render the splash screen and VLC would pop on top of it. Both these packages proved to be difficult to maintain on Raspberry Pi OS versions. This has been replaced with a browser-based renderer which will host both the splash screen and video playback (streamed via ffmpeg) which should work much better on a wide variety of OS. Secondly, this means standalone server support: now you can run pikaraoke as a dedicated server process, launch the splash screen on a remote browser, and don't have to have your pi connected to the TV!
+Why? Less pesky dependencies for one. Pygame was previously used to render the splash screen and VLC would pop on top of it. Both these packages proved to be difficult to maintain on Raspberry Pi OS versions. This has been replaced with a browser-based renderer which will host both the splash screen and video playback (streamed via ffmpeg) which should work much better on a wide variety of OS. Secondly, this means standalone server support: now you can run karacool as a dedicated server process, launch the splash screen on a remote browser, and don't have to have your pi connected to the TV!
 
 - Splash screen player is way more dynamic feature-rich now
 - Better python environment handling and yt-dlp install isolation
@@ -102,15 +102,15 @@ Run the setup script to install python dependencies:
 setup-windows.bat
 ```
 
-Windows firewall may initially block connections to port 5555. Be sure to allow this port. It should prompt the first time you run pikaraoke and launch a song. Otherwise, configure it manually in the security settings.
+Windows firewall may initially block connections to port 5555. Be sure to allow this port. It should prompt the first time you run karacool and launch a song. Otherwise, configure it manually in the security settings.
 
 ## Launch
 
-cd to the pikaraoke directory and run:
+cd to the karacool directory and run:
 
 `./karacool.sh` (linux/osx/pi) or `karacool.bat` (windows)
 
-The app should launch and show the PiKaraoke splash screen and a QR code and a URL. Using a device connected to the same wifi network as the Pi, scan this QR code or enter the URL into a browser. You are now connected! You can start exploring the UI and adding/queuing new songs directly from YouTube.
+The app should launch and show the Karacool splash screen and a QR code and a URL. Using a device connected to the same wifi network as the Pi, scan this QR code or enter the URL into a browser. You are now connected! You can start exploring the UI and adding/queuing new songs directly from YouTube.
 
 If you'd like to manually open the splash screen/player or open it on a separate computer's web browser, run `./karacool.sh --headless` to suppress the launch of the splash screen. Then point your browser the the URL it tells you.
 
@@ -138,7 +138,7 @@ Restart and it should auto-launch on your next boot.
 
 If you want to kill the karacool process, you can do so from the Karacool Web UI under: `Info > Quit karacool`. Or you can ssh in and run `sudo killall python` or something similar.
 
-Note that if your wifi/network is inactive pikaraoke will error out 10 seconds after being launched. This is to prevent the app from hijacking your ability to login to repair the connection.
+Note that if your wifi/network is inactive karacool will error out 10 seconds after being launched. This is to prevent the app from hijacking your ability to login to repair the connection.
 
 ## Usage
 
@@ -155,9 +155,9 @@ options:
   -f FFMPEG_PORT, --ffmpeg-port FFMPEG_PORT
                         Desired ffmpeg port. This is where video streams will be hosted (default: 5556)
   -d DOWNLOAD_PATH, --download-path DOWNLOAD_PATH
-                        Desired path for downloaded songs. (default: ~/pikaraoke-songs)
+                        Desired path for downloaded songs. (default: ~/karacool-songs)
   -y YOUTUBEDL_PATH, --youtubedl-path YOUTUBEDL_PATH
-                        Path of youtube-dl. (default: /Users/vic/coding/pikaraoke/.venv/bin/yt-dlp)
+                        Path of youtube-dl. (default: /Users/vic/coding/karacool/.venv/bin/yt-dlp)
   -v VOLUME, --volume VOLUME
                         Set initial player volume. A value between 0 and 1. (default: 0.85)
   -s SPLASH_DELAY, --splash-delay SPLASH_DELAY
@@ -171,12 +171,12 @@ options:
   --hide-raspiwifi-instructions
                         Hide RaspiWiFi setup instructions from the splash screen.
   --hide-splash-screen, --headless
-                        Headless mode. Don't launch the splash screen/player on the pikaraoke server
+                        Headless mode. Don't launch the splash screen/player on the karacool server
   --high-quality        Download higher quality video. Note: requires ffmpeg and may cause CPU, download speed, and other performance issues
   --logo-path LOGO_PATH
                         Path to a custom logo image file for the splash screen. Recommended dimensions ~ 2048x1024px
   -u URL, --url URL     Override the displayed IP address with a supplied URL. This argument should include port, if necessary
-  --hide-overlay        Hide overlay that shows on top of video with pikaraoke QR code and IP
+  --hide-overlay        Hide overlay that shows on top of video with karacool QR code and IP
   --admin-password ADMIN_PASSWORD
                         Administrator password, for locking down certain features of the web UI such as queue editing, player controls, song editing,
                         and system shutdown. If unspecified, everyone is an admin.
@@ -186,7 +186,7 @@ options:
 
 ### I'm not hearing audio out of the headphone jack
 
-By default the raspbian outputs to HDMI audio when it's available. Pikaraoke tries to output to both HDMI and headphone, but if it doesn't work you may need to to force it to the headphone jack. This is definitely the case when using VLC. To do so, change following setting on the pi:
+By default the raspbian outputs to HDMI audio when it's available. Karacool tries to output to both HDMI and headphone, but if it doesn't work you may need to to force it to the headphone jack. This is definitely the case when using VLC. To do so, change following setting on the pi:
 `sudo raspi-config`
 Advanced Options > Audio > Force 3.5mm (headphone)
 
@@ -215,7 +215,7 @@ You can update youtube-dl directly from the web UI. Go to `Info > Update Youtube
 
 youtube-dl is very CPU intensive, especially for single-core devices like the pi models zero and less-than 2. The more simultaneous downloads there are, the longer they will take. Try to limit it to 1-2 at a time. Pi 3 can handle quite a bit more.
 
-### I brought my pikaraoke to a friend's house and it can't connect to their network. How do I change wifi connection without ssh?
+### I brought my karacool to a friend's house and it can't connect to their network. How do I change wifi connection without ssh?
 
 These are my preferred ways to do it, but they might require either a USB keyboard or a computer with an SD Card reader.
 
@@ -237,7 +237,7 @@ Add the SD card back to the pi and start it up. On boot, Raspbian should automat
 
 Finally, this package can set up your pi as a self-configuring wireless access point, but hasn't been updated in a while https://github.com/jasbur/RaspiWiFi
 
-### Can I run PiKaraoke without a wifi/network connection?
+### Can I run Karacool without a wifi/network connection?
 
 Yes, but you can only access your existing library and won't be able to download new songs.
 
@@ -249,7 +249,7 @@ You can also try this: https://github.com/jasbur/RaspiWiFi (used for configuring
 
 The pi doesn't have a hardware audio input. Technically, you should be able to run a microphone through it with a USB sound card attached to the pi (or USB microphone), but the latency is generally not usable.
 
-Ideally, you'd have a mixer and amplifier that you could run the line out of the pi to, as well as the microphones. I used this affordable wireless microphone set from amazon: https://amzn.to/2OXKXdc (affiliate link) It has a line-in so you can also run PiKaraoke into the mix, and output to an amplifier.
+Ideally, you'd have a mixer and amplifier that you could run the line out of the pi to, as well as the microphones. I used this affordable wireless microphone set from amazon: https://amzn.to/2OXKXdc (affiliate link) It has a line-in so you can also run Karacool into the mix, and output to an amplifier.
 
 ### How do I change song pitch/key?
 

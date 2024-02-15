@@ -43,7 +43,7 @@ app.secret_key = os.urandom(24)
 app.jinja_env.add_extension('jinja2.ext.i18n')
 app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'translations'
 babel = Babel(app)
-site_name = "PiKaraoke"
+site_name = "Karacool"
 admin_password = None
 is_raspberry_pi = get_platform() == "raspberry_pi"
 
@@ -145,7 +145,7 @@ def nowplaying():
         rc["hash"] = hash_dict(rc) # used to detect changes in the now playing data
         return json.dumps(rc)
     except (Exception) as e:
-        logging.error("Problem loading /nowplaying, pikaraoke may still be starting up: " + str(e))
+        logging.error("Problem loading /nowplaying, karacool may still be starting up: " + str(e))
         return ""
 
 # Call this after receiving a command in the front end
@@ -568,7 +568,7 @@ def refresh():
 @app.route("/quit")
 def quit():
     if (is_admin()):
-        flash("Quitting pikaraoke now!", "is-warning")
+        flash("Quitting karacool now!", "is-warning")
         th = threading.Thread(target=delayed_halt, args=[0])
         th.start()
     else:
@@ -609,7 +609,7 @@ def expand_fs():
         flash("You don't have permission to resize the filesystem", "is-danger")
     return redirect(url_for("home"))
 
-# Proxy the video stream from ffmpeg to /stream/<path>, so pikaraoke works over a single port
+# Proxy the video stream from ffmpeg to /stream/<path>, so karacool works over a single port
 @app.route('/stream/<path>', methods=["GET", "POST"])  
 def redirect_to_ffmpeg_stream(path):  #NOTE var :path will be unused as all path we need will be read from :request ie from flask import request
     res = requests.request(  # ref. https://stackoverflow.com/a/36601467/248616
@@ -641,19 +641,19 @@ def get_default_youtube_dl_path(platform):
      
 def get_default_dl_dir(platform):
     if is_raspberry_pi:
-        return "~/pikaraoke-songs"
+        return "~/karacool-songs"
     elif platform == "windows":
-        legacy_directory = os.path.expanduser("~\pikaraoke\songs")
+        legacy_directory = os.path.expanduser("~\karacool\songs")
         if os.path.exists(legacy_directory):
             return legacy_directory
         else:
-            return "~\pikaraoke-songs"
+            return "~\karacool-songs"
     else:
-        legacy_directory = "~/pikaraoke/songs"
+        legacy_directory = "~/karacool/songs"
         if os.path.exists(legacy_directory):
             return legacy_directory
         else:
-            return "~/pikaraoke-songs"
+            return "~/karacool-songs"
 
 
 if __name__ == "__main__":
@@ -756,7 +756,7 @@ if __name__ == "__main__":
         "--hide-splash-screen",
         "--headless",
         action="store_true",
-        help="Headless mode. Don't launch the splash screen/player on the pikaraoke server",
+        help="Headless mode. Don't launch the splash screen/player on the karacool server",
         required=False,
     )
     parser.add_argument(
@@ -782,7 +782,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--hide-overlay",
         action="store_true",
-        help="Hide overlay that shows on top of video with pikaraoke QR code and IP",
+        help="Hide overlay that shows on top of video with karacool QR code and IP",
         required=False,
     ),
     parser.add_argument(
@@ -867,7 +867,7 @@ if __name__ == "__main__":
         options.add_experimental_option("excludeSwitches", ['enable-automation'])
         driver = webdriver.Chrome(service=service, options=options)
         driver.get(f"{k.url}/splash" )
-        driver.add_cookie({'name': 'user', 'value': 'PiKaraoke-Host'})
+        driver.add_cookie({'name': 'user', 'value': 'Karacool-Host'})
         # Clicking this counts as an interaction, which will allow the browser to autoplay audio
         wait = WebDriverWait(driver, 60)
         elem = wait.until(EC.element_to_be_clickable((By.ID, "permissions-button")))

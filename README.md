@@ -75,8 +75,8 @@ Python >= 3.8 is necessary
 Clone this repo:
 
 ```
-git clone https://github.com/vicwomg/pikaraoke.git
-cd pikaraoke
+git clone https://github.com/mshendrikx/karacool.git
+cd karacool
 ```
 
 If you plan to run the splash screen in auto-launch headed mode, you also need to install Chrome browser. On raspberry pi, Chromium should be installed already, which also works fine.
@@ -111,41 +111,41 @@ Windows firewall may initially block connections to port 5555. Be sure to allow 
 
 cd to the pikaraoke directory and run:
 
-`./pikaraoke.sh` (linux/osx/pi) or `pikaraoke.bat` (windows)
+`./karacool.sh` (linux/osx/pi) or `karacool.bat` (windows)
 
 The app should launch and show the PiKaraoke splash screen and a QR code and a URL. Using a device connected to the same wifi network as the Pi, scan this QR code or enter the URL into a browser. You are now connected! You can start exploring the UI and adding/queuing new songs directly from YouTube.
 
-If you'd like to manually open the splash screen/player or open it on a separate computer's web browser, run `./pikaraoke.sh --headless` to suppress the launch of the splash screen. Then point your browser the the URL it tells you.
+If you'd like to manually open the splash screen/player or open it on a separate computer's web browser, run `./karacool.sh --headless` to suppress the launch of the splash screen. Then point your browser the the URL it tells you.
 
-For more options, run `./pikaraoke.sh --help`
+For more options, run `./karacool.sh --help`
 
-## Auto-start PiKaraoke
+## Auto-start Karacool
 
 This is optional, but you may want to make your raspberry pi a dedicated karaoke device.
 
 ```
 mkdir /home/pi/.config/autostart
-nano /home/pi/.config/autostart/pikaraoke.desktop
+nano /home/pi/.config/autostart/karacool.desktop
 ```
 
-Add this to the file, assuming you installed to /home/pi/pikaraoke, change the Exec path accordingly if not
+Add this to the file, assuming you installed to /home/pi/karacool, change the Exec path accordingly if not
 
 ```
 [Desktop Entry]
 Type=Application
-Name=Pikaraoke
-Exec=/home/pi/pikaraoke/pikaraoke.sh
+Name=Karacool
+Exec=/home/pi/karacool/karacool.sh
 ```
 
 Restart and it should auto-launch on your next boot.
 
-If you want to kill the pikaraoke process, you can do so from the PiKaraoke Web UI under: `Info > Quit pikaraoke`. Or you can ssh in and run `sudo killall python` or something similar.
+If you want to kill the karacool process, you can do so from the Karacool Web UI under: `Info > Quit karacool`. Or you can ssh in and run `sudo killall python` or something similar.
 
 Note that if your wifi/network is inactive pikaraoke will error out 10 seconds after being launched. This is to prevent the app from hijacking your ability to login to repair the connection.
 
 ## Usage
 
-May not be up to date, run `./pikaraoke.sh --help` for the latest:
+May not be up to date, run `./karacool.sh --help` for the latest:
 
 ```
 usage: app.py [-h] [-p PORT] [-f FFMPEG_PORT] [-d DOWNLOAD_PATH] [-y YOUTUBEDL_PATH] [-v VOLUME] [-s SPLASH_DELAY] [-t SCREENSAVER_TIMEOUT]
@@ -260,7 +260,7 @@ While a song is playing, the home screen of the web interface will show a transp
 
 ### How do I add cdg or mp3+cdg zip files?
 
-You'll need to add them manually by copying them to the root of your download folder. Run `pikaraoke.sh --help` and look under DOWNLOAD_PATH to find out what the default folder is, or specify your own. Only cdg/mp3 pairs and .zip files are supported.
+You'll need to add them manually by copying them to the root of your download folder. Run `karacool.sh --help` and look under DOWNLOAD_PATH to find out what the default folder is, or specify your own. Only cdg/mp3 pairs and .zip files are supported.
 
 ### My mp3/cdg file is not playing
 

@@ -18,8 +18,9 @@ from unidecode import unidecode
 
 from lib.file_resolver import FileResolver
 from lib.get_platform import get_platform
-# Add Karacool library
+# Karacool-dev-start - Add Karacool library
 import karacooladdon as KCaddon
+# Karacool-dev-end - Add Karacool library
 
 # Support function for reading  lines from ffmpeg stderr without blocking
 def enqueue_output(out, queue):
@@ -498,6 +499,9 @@ class Karaoke:
             else:
                 logging.info("'%s' is adding song to queue: %s" % (user, song_path))
                 self.queue.append(queue_item)
+                # Karacool-dev-start - Reorder queue
+                self.queue = KCaddon.queue_reoder(self)
+                # Karacool-dev-end - Reorder queue
             return True
 
     def queue_add_random(self, amount):

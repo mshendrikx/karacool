@@ -18,7 +18,8 @@ from unidecode import unidecode
 
 from lib.file_resolver import FileResolver
 from lib.get_platform import get_platform
-
+# Add Karacool library
+import karacooladdon as KCaddon
 
 # Support function for reading  lines from ffmpeg stderr without blocking
 def enqueue_output(out, queue):

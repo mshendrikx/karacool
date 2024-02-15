@@ -77,7 +77,8 @@ class Karaoke:
         hide_overlay=False,
         screensaver_timeout = 300,
         url=None,
-        prefer_hostname=True
+        prefer_hostname=True,
+        queue_balance=False
     ):
 
         # override with supplied constructor args if provided
@@ -97,6 +98,7 @@ class Karaoke:
         self.screensaver_timeout = screensaver_timeout
         self.url_override = url
         self.prefer_hostname = prefer_hostname
+        self.queue_balance = queue_balance
 
         # other initializations
         self.platform = get_platform()
@@ -500,7 +502,8 @@ class Karaoke:
                 logging.info("'%s' is adding song to queue: %s" % (user, song_path))
                 self.queue.append(queue_item)
                 # Karacool-dev-start - Reorder queue
-                self.queue = KCaddon.queue_reoder(self)
+                if (self.queue_balance):
+                    self.queue = KCaddon.queue_reoder(self)
                 # Karacool-dev-end - Reorder queue
             return True
 

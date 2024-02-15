@@ -791,11 +791,21 @@ if __name__ == "__main__":
         default=None,
         required=False,
     ),
+    parser.add_argument(
+        "--queue-balance",
+        action="store_true",
+        help="Balance queue songs.",
+        default=False,
+        required=False,
+    )
 
     args = parser.parse_args()
 
     if (args.admin_password):
         admin_password = args.admin_password
+
+    if(args.queue_balance == True):
+        queue_balance = True
 
     app.jinja_env.globals.update(filename_from_path=filename_from_path)
     app.jinja_env.globals.update(url_escape=quote)
@@ -838,7 +848,8 @@ if __name__ == "__main__":
         hide_overlay=args.hide_overlay,
         screensaver_timeout=args.screensaver_timeout,
         url=args.url,
-        prefer_hostname=args.prefer_hostname
+        prefer_hostname=args.prefer_hostname,
+        queue_balance = args.queue_balance
     )
 
     # Start the CherryPy WSGI web server

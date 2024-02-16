@@ -39,7 +39,7 @@ _ = flask_babel.gettext
 
 app = Flask(__name__)
 
-app.secret_key = os.urandom(24)
+app.secret_key = os.urandom(24) 
 app.jinja_env.add_extension('jinja2.ext.i18n')
 app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'translations'
 babel = Babel(app)

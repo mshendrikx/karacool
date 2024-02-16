@@ -38,12 +38,14 @@ _ = flask_babel.gettext
 
 
 app = Flask(__name__)
+
 app.secret_key = os.urandom(24)
 app.jinja_env.add_extension('jinja2.ext.i18n')
 app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'translations'
 babel = Babel(app)
 site_name = "Karacool"
 admin_password = None
+tokens = None
 is_raspberry_pi = get_platform() == "raspberry_pi"
 
 def filename_from_path(file_path, remove_youtube_id=True):
@@ -634,8 +636,7 @@ def get_default_dl_dir(platform):
         else:
             return "~/karacool-songs"
 
-
-if __name__ == "__main__":
+def main():
 
     platform = get_platform()
     default_port = 5555
@@ -772,6 +773,12 @@ if __name__ == "__main__":
     ),
     # Karacool add-on Start
     parser.add_argument(
+        "--web-password",
+        help="Cloud password, for app deployed in web.",
+        default=None,
+        required=False,
+    ),
+    parser.add_argument(
         "--queue-balance",
         action="store_true",
         help="Balance queue songs.",
@@ -784,6 +791,8 @@ if __name__ == "__main__":
     # Karacool add-on Start
     if(args.queue_balance):
         queue_balance = True
+    if (args.web_password):
+        tokens  = { args.web_password }
     # Karacool add-on End
 
     if (args.admin_password):
@@ -791,7 +800,6 @@ if __name__ == "__main__":
 
     app.jinja_env.globals.update(filename_from_path=filename_from_path)
     app.jinja_env.globals.update(url_escape=quote)
-
 
     # check if required binaries exist
     if not os.path.isfile(args.youtubedl_path):
@@ -876,3 +884,6 @@ if __name__ == "__main__":
     cherrypy.engine.exit()
 
     sys.exit()
+
+if __name__ == "__main__":
+    main()

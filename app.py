@@ -28,6 +28,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 import karaoke
 from constants import LANGUAGES, VERSION
 from lib.get_platform import get_platform
+from flask_httpauth import HTTPDigestAuth
 
 try:
     from urllib.parse import quote, unquote
@@ -38,14 +39,15 @@ _ = flask_babel.gettext
 
 
 app = Flask(__name__)
-
+web_auth = HTTPDigestAuth()
 app.secret_key = os.urandom(24) 
 app.jinja_env.add_extension('jinja2.ext.i18n')
 app.config['BABEL_TRANSLATION_DIRECTORIES'] = 'translations'
+app.config['SECRET_KEY'] = 'secret key here'
 babel = Babel(app)
 site_name = "Karacool"
 admin_password = None
-tokens = None
+users = None
 is_raspberry_pi = get_platform() == "raspberry_pi"
 
 def filename_from_path(file_path, remove_youtube_id=True):
@@ -85,7 +87,14 @@ def get_locale():
     """Select the language to display the webpage in based on the Accept-Language header"""
     return request.accept_languages.best_match(LANGUAGES.keys())
 
+@web_auth.get_password
+def get_pw(username):
+    if username in users:
+        return users.get(username)
+    return None
+    
 @app.route("/")
+@web_auth.login_required
 def home():
     return render_template(
         "home.html",
@@ -156,6 +165,7 @@ def clear_command():
     return ""
 
 @app.route("/queue")
+@web_auth.login_required
 def queue():
     return render_template(
         "queue.html", queue=k.queue, site_title=site_name, title="Queue", admin=is_admin()
@@ -636,7 +646,7 @@ def get_default_dl_dir(platform):
         else:
             return "~/karacool-songs"
 
-def main():
+if __name__ == "__main__":
 
     platform = get_platform()
     default_port = 5555
@@ -791,8 +801,9 @@ def main():
     # Karacool add-on Start
     if(args.queue_balance):
         queue_balance = True
+        
     if (args.web_password):
-        tokens  = { args.web_password }
+        users = { "karacool": args.web_password }
     # Karacool add-on End
 
     if (args.admin_password):
@@ -884,6 +895,3 @@ def main():
     cherrypy.engine.exit()
 
     sys.exit()
-
-if __name__ == "__main__":
-    main()

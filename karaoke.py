@@ -18,9 +18,9 @@ from unidecode import unidecode
 
 from lib.file_resolver import FileResolver
 from lib.get_platform import get_platform
-# Karacool-dev-start - Add Karacool library
+# Karacool add-on Start
 import karacooladdon as KCaddon
-# Karacool-dev-end - Add Karacool library
+# Karacool add-on End
 
 # Support function for reading  lines from ffmpeg stderr without blocking
 def enqueue_output(out, queue):
@@ -62,6 +62,9 @@ class Karaoke:
 
     def __init__(
         self,
+        # Karacool add-on Start
+        queue_balance=False,
+        # Karacool add-on End        
         port=5555,
         ffmpeg_port=5556,
         download_path="/usr/lib/karacool/songs",
@@ -77,14 +80,12 @@ class Karaoke:
         hide_overlay=False,
         screensaver_timeout = 300,
         url=None,
-        prefer_hostname=True,
-        queue_balance=False
+        prefer_hostname=True
     ):
 
         # override with supplied constructor args if provided
         self.port = port
         self.ffmpeg_port = ffmpeg_port
-        self.ffmpeg_url_base = f"http://0.0.0.0:{self.ffmpeg_port}"
         self.hide_url = hide_url
         self.hide_raspiwifi_instructions = hide_raspiwifi_instructions
         self.hide_splash_screen = hide_splash_screen
@@ -98,8 +99,10 @@ class Karaoke:
         self.screensaver_timeout = screensaver_timeout
         self.url_override = url
         self.prefer_hostname = prefer_hostname
+        # Karacool add-on Start
         self.queue_balance = queue_balance
-
+        # Karacool add-on End
+        
         # other initializations
         self.platform = get_platform()
         self.screen = None
@@ -365,10 +368,9 @@ class Karaoke:
     def play_file(self, file_path, semitones=0):
         logging.info(f"Playing file: {file_path} transposed {semitones} semitones")
         stream_uid = int(time.time())
-        # This is the stream URL that will be accessed by the splash screen client, Flask will
-        stream_url = f"{self.url}/stream/{stream_uid}"
-        # Used by ffmpeg, pass a 0.0.0.0 IP to ffmpeg which will work for both hostnames and direct IP access
-        ffmpeg_url = f"{self.ffmpeg_url_base}/{stream_uid}"
+        stream_url = f"{self.url_parsed.scheme}://{self.url_parsed.hostname}:{self.ffmpeg_port}/{stream_uid}"
+        # pass a 0.0.0.0 IP to ffmpeg which will work for both hostnames and direct IP access
+        ffmpeg_url = f"http://0.0.0.0:{self.ffmpeg_port}/{stream_uid}"
 
         pitch = 2**(semitones/12) #The pitch value is (2^x/12), where x represents the number of semitones
 
@@ -501,10 +503,10 @@ class Karaoke:
             else:
                 logging.info("'%s' is adding song to queue: %s" % (user, song_path))
                 self.queue.append(queue_item)
-                # Karacool-dev-start - Reorder queue
+                # Karacool add-on Start
                 if (self.queue_balance):
-                    self.queue = KCaddon.queue_reoder(self)
-                # Karacool-dev-end - Reorder queue
+                    self.queue = KCaddon.queue_reoder(self)               
+                # Karacool add-on End
             return True
 
     def queue_add_random(self, amount):

@@ -256,7 +256,7 @@ class Karaoke:
 
     def get_search_results(self, textToSearch):
         logging.info("Searching YouTube for: " + textToSearch)
-        num_results = 10
+        num_results = 20
         yt_search = 'ytsearch%d:"%s"' % (num_results, unidecode(textToSearch))
         cmd = [self.youtubedl_path, "-j", "--no-playlist", "--flat-playlist", yt_search]
         logging.debug("Youtube-dl search command: " + " ".join(cmd))

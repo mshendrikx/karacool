@@ -280,7 +280,8 @@ class Karaoke:
 
     def download_video(self, video_url, enqueue=False, user="Karacool"):
         logging.info("Downloading video: " + video_url)
-        dl_path = self.download_path + "%(title)s---%(id)s.%(ext)s"
+        #dl_path = self.download_path + "%(title)s---%(id)s.%(ext)s"
+        dl_path = self.download_path + KCaddon.SONG_FILE_NAME + ".%(ext)s"
         file_quality = (
             "bestvideo[ext!=webm][height<=1080]+bestaudio[ext!=webm]/best[ext!=webm]"
             if self.high_quality
@@ -296,8 +297,8 @@ class Karaoke:
             logging.debug("Song successfully downloaded: " + video_url)
             self.get_available_songs()
             if enqueue:
-                y = self.get_youtube_id_from_url(video_url)
-                s = self.find_song_by_youtube_id(y)
+                #y = self.get_youtube_id_from_url(video_url)
+                s = self.find_song_by_youtube_id(KCaddon.SONG_FILE_NAME)
                 if s:
                     self.enqueue(s, user)
                 else:

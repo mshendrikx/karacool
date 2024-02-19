@@ -340,11 +340,11 @@
           {# MSG: Link which clears the text from the search box. #} {% trans
           %}Clear{% endtrans %}</a
         >
-        <label class="checkbox is-size-7">
-          <input type="checkbox" id="show-advanced" name="show-advanced" />
+        {#<label class="checkbox is-size-7">
+          <input type="checkbox" id="show-advanced" name="show-advanced" />#}
           {# MSG: Checkbox label which enables more options when searching. #}
-          {% trans %}Advanced{% endtrans %}
-        </label>
+          {#{% trans %}Advanced{% endtrans %}
+        </label>#}
       </div>
 
       <div>
@@ -438,6 +438,29 @@
     <small><i>'{{ search_term }}'</i></small>
     {%- endtrans %}
   </div>
+  {# MSG: Karacool added. Start #}
+  {% if search_data %}
+  <div class="field" id="container_search_data">
+    <form action="/search" method="get">
+      <div class="field select">
+        <select id="search_data_selector" name="song-data">
+          > {% for title in search_data %}
+          <option value="{{title}}">{{title}}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="field">
+        <button
+          class="button is-success is-rounded"
+          id="youtube-button"
+          type="submit"
+        >
+          Youtube</button>
+      </div>
+    </form>
+  </div>
+  {% endif %}
+  {# MSG: Karacool added. End #}
   {% if search_results %}
   <div class="field" id="container_search_result">
     <form action="{{ url_for('download') }}" method="post">

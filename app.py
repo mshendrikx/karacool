@@ -35,6 +35,10 @@ try:
 except ImportError:
     from urllib import quote, unquote
 
+# Karacool add-on Start
+import karacooladdon as KCaddon
+# Karacool add-on End
+
 _ = flask_babel.gettext
 
 
@@ -89,9 +93,7 @@ def get_locale():
 
 @web_auth.get_password
 def get_pw(username):
-    if username in users:
-        return users.get(username)
-    return None
+    return users.get(username)
     
 @app.route("/")
 @web_auth.login_required
@@ -278,15 +280,23 @@ def vol_down():
 
 @app.route("/search", methods=["GET"])
 def search():
-    if "search_string" in request.args:
+    if "search_string" in request.args:        
         search_string = request.args["search_string"]
-        if ("non_karaoke" in request.args and request.args["non_karaoke"] == "true"):
-            search_results = k.get_search_results(search_string)
-        else:
-            search_results = k.get_karaoke_search_results(search_string)
-    else:
-        search_string = None
+        search_data = KCaddon.lastfm_data(search_string)
         search_results = None
+    else:
+        if "song-data" in request.args:
+            search_data = None
+            search_string = request.args["song-data"]
+            KCaddon.SONG_FILE_NAME = search_string
+            if ("non_karaoke" in request.args and request.args["non_karaoke"] == "true"):
+                search_results = k.get_search_results(search_string)
+            else:
+                search_results = k.get_karaoke_search_results(search_string)        
+        else:
+            search_string = None
+            search_results = None
+            search_data = None
     return render_template(
         "search.html",
         site_title=site_name,
@@ -294,6 +304,7 @@ def search():
         songs=k.available_songs,
         search_results=search_results,
         search_string=search_string,
+        search_data=search_data,
     )
 
 @app.route("/autocomplete")
@@ -804,6 +815,8 @@ if __name__ == "__main__":
         
     if (args.web_password):
         users = { "karacool": args.web_password }
+    else:
+        users = { "karacool": None }
     # Karacool add-on End
 
     if (args.admin_password):

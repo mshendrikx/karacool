@@ -289,10 +289,16 @@ def search():
             search_data = None
             search_string = request.args["song-data"]
             KCaddon.SONG_FILE_NAME = search_string
+            if "https://www.youtube.com/watch?v=" in request.args["song-url"]: 
+                search_string = request.args["song-url"]
             if ("non_karaoke" in request.args and request.args["non_karaoke"] == "true"):
                 search_results = k.get_search_results(search_string)
             else:
-                search_results = k.get_karaoke_search_results(search_string)        
+                search_results = k.get_karaoke_search_results(search_string) 
+            if "https://www.youtube.com/watch?v=" in request.args["song-url"]: 
+                search_result = search_results[0]
+                search_results = []
+                search_results.append(search_result)                        
         else:
             search_string = None
             search_results = None

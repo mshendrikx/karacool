@@ -449,13 +449,14 @@
           {% endfor %}
         </select>
       </div>
+      <div class="label">
+        {# MSG: Label for an input which takes a YouTube url directly instead
+        of searching titles. #} {% trans %}Direct download YouTube url:{%
+        endtrans %}
+      </div>
+      <input class="input" id="direct-download-url" type="text" name="song-url" />
       <div class="field">
-        <button
-          class="button is-success is-rounded"
-          id="youtube-button"
-          type="submit"
-        >
-          Youtube</button>
+        <button class="button is-success is-rounded" id="youtube-button" type="submit">Youtube</button>
       </div>
     </form>
   </div>
